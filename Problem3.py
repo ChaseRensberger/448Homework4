@@ -1,5 +1,21 @@
 import numpy as np
 import scipy as sp
+import matplotlib.pyplot as plt
+from sklearn import datasets
+
+iris = datasets.load_iris()
+X = iris.data[:, :4]
+y = iris.target
+
+# Create new data set with two features: (sepal length/sepal width, petal length/petal width)
+for i in X:
+    i[0] = i[0] / i[1]
+    i[1] = i[2] / i[3]
+X = X[:, :2]
+
+# Plot data with colors
+plt.scatter(X[:, 0], X[:, 1], c=y)
+# plt.show()
 
 
 def k_init(X, k):
