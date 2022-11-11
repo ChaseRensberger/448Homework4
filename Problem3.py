@@ -89,7 +89,13 @@ def compute_objective(X, C):
     accuracy: float
         The objective for the given assigments
     """
-    pass
+    
+
+    squared_distances = [-1 for x in range(len(X))]
+
+    for point_idx in range(len(X)):
+        pass
+
 
 
 def k_means_pp(X, k, max_iter):
