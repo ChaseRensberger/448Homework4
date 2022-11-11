@@ -2,6 +2,8 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 from sklearn import datasets
+import random
+import math
 
 iris = datasets.load_iris()
 X = iris.data[:, :4]
@@ -14,7 +16,7 @@ for i in X:
 X = X[:, :2]
 
 # Plot data with colors
-plt.scatter(X[:, 0], X[:, 1], c=y)
+# plt.scatter(X[:, 0], X[:, 1], c=y)
 # plt.show()
 
 
@@ -34,7 +36,13 @@ def k_init(X, k):
     init_centers: array (k, d)
         The initialize centers for kmeans++
     """
-    pass
+    # Create k x 2 np array so that we have k centroids, each defined by 2 parameters
+    centroids = np.empty((k, 2))
+    #initialize these to random values
+    for i in centroids:
+        i = random.choice(X)
+
+    return centroids
 
 
 def assign_data2clusters(X, C):
@@ -53,7 +61,17 @@ def assign_data2clusters(X, C):
         The binary matrix A which shows the assignments of data points (X) to
         the input centers (C).
     """
-    pass
+    data_map = np.empty((len(X), len(C)))
+
+    for point_idx in range(len(X)):
+        distances = [-1 for x in range(len(C))]
+        for i in range(len(C)):
+            distances[i] = math.dist(X[point_idx], C[i])
+        
+        data_map[point_idx][0] = X[point_idx]
+        data_map[point_idx][1] =  distances.index(min(distances))
+
+    return data_map
 
 
 def compute_objective(X, C):
