@@ -27,7 +27,7 @@ def determine_xgboost_hp(X_train, y_train, X_test, y_test, default_n_estimators,
     rf_default.fit(X_train, y_train)
     rf_default_prediction = rf_default.predict(X_test)
     default_score = metrics.accuracy_score(y_test, rf_default_prediction)
-    print("Default score: " + str(default_score))
+    # print("Default score: " + str(default_score))
 
     param_grid = {
         'n_estimators': [x for x in range(50, 1000, 50)],
@@ -39,7 +39,7 @@ def determine_xgboost_hp(X_train, y_train, X_test, y_test, default_n_estimators,
     }
 
     rf = XGBClassifier()
-    random_search = RandomizedSearchCV(estimator = rf, param_distributions=param_grid, cv = 5, n_jobs = -1, verbose = 2, return_train_score=True, n_iter=20)
+    random_search = RandomizedSearchCV(estimator = rf, param_distributions=param_grid, cv = 5, n_jobs = -1, verbose = 2, return_train_score=True, n_iter=10)
     random_search.fit(X_train, y_train)
     rf_best_params = random_search.best_params_
 
@@ -47,14 +47,14 @@ def determine_xgboost_hp(X_train, y_train, X_test, y_test, default_n_estimators,
     rf_best_params_classifier.fit(X_train, y_train)
     rf_best_params_prediction = rf_best_params_classifier.predict(X_test)
     best_params_score = metrics.accuracy_score(y_test, rf_best_params_prediction)
-    print("Best parameters score: " + str(best_params_score))
+    # print("Best parameters score: " + str(best_params_score))
 
     return (default_score, rf_best_params, best_params_score, random_search.cv_results_)
     
 
 
-rf_out = determine_xgboost_hp(X_train, y_train, X_test, y_test, 100, None, 1, 1.0, 0, None)
-print(rf_out[0])
-print(rf_out[1])
-print(rf_out[2])
-print(rf_out[3])
+# rf_out = determine_xgboost_hp(X_train, y_train, X_test, y_test, 100, None, 1, 1.0, 0, None)
+# print(rf_out[0])
+# print(rf_out[1])
+# print(rf_out[2])
+# print(rf_out[3])

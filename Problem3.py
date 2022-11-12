@@ -20,6 +20,10 @@ X = X[:, :2]
 # plt.show()
 
 
+def distance(p1, p2):
+    return np.linalg.norm(p1-p2)
+
+
 def k_init(X, k):
     """ k-means++: initialization algorithm
 
@@ -45,6 +49,7 @@ def k_init(X, k):
     return centroids
 
 
+
 def assign_data2clusters(X, C):
     """ Assignments of data to the clusters
     Parameters
@@ -63,13 +68,12 @@ def assign_data2clusters(X, C):
     """
     data_map = np.empty((len(X), len(C)))
 
-    for point_idx in range(len(X)):
-        distances = [-1 for x in range(len(C))]
-        for i in range(len(C)):
-            distances[i] = math.dist(X[point_idx], C[i])
-        
-        data_map[point_idx][0] = X[point_idx]
-        data_map[point_idx][1] =  distances.index(min(distances))
+    # for i in range(len(X)):
+    #     distances = [0 for x in range(len(C))] # len = 3
+    #     X[i]
+
+
+
 
     return data_map
 
