@@ -3,7 +3,7 @@
 # Honestly a lot of this code is dependent on k equaling 3 which is obviously not the only condition but is what I implemented because I am very low on time to finish this.
 # I also picked k=3 because it is the true value of the data, which obviously you wouldn't know it a real case but I implemented here just so what I had would be as relevant as possible.
 # Everything else (other than the value of k) is working fine though as far as I can tell.
-# There is a seperate pdf in this directory called Problem5Plots.pdf which has the plots showing the actual coloring initially alongside the graphs of the objective function for each iteration
+# There is a seperate pdf in this directory called Problem3Plots.pdf which has the plots showing the actual coloring initially alongside the graphs of the objective function for each iteration
 # and then a final plot with the data colored by assigment which can be compared to the first plot
 
 import numpy as np
@@ -21,6 +21,8 @@ y = iris.target
 for i in X:
     i[0] = i[0] / i[1]
     i[1] = i[2] / i[3]
+
+# Only want firs to columns
 X = X[:, :2]
 
 # Used for plot 1 in the pdf
@@ -67,6 +69,7 @@ def k_init(X, k):
 
     distances = []
     for i in range(len(X)):
+        # Create centroids to be a furthest distance possible from other centroids
         distances.append(min(distance(centroids[0], X[i])**2, distance(centroids[1], X[i])**2))
 
     centroids[2] = X[distances.index(max(distances))]
@@ -91,6 +94,9 @@ def assign_data2clusters(X, C):
         The binary matrix A which shows the assignments of data points (X) to
         the input centers (C).
     """
+
+    # This function outputs a map where the number of rows is the number of points and we put a 1 in the value for the cluster it belongs to
+    # We do this by looping through each point and finding its minimum distance to each cluster
     data_map = np.zeros((len(X), len(C)))
 
     for i in range(len(X)):
@@ -158,6 +164,7 @@ def k_means_pp(X, k, max_iter):
     objective_values: array, shape (max_iter)
         The objective value at each iteration
     """
+    # These values will be updated during the function execution
     centroids = k_init(X, k)
     obj_func_values = []
 
@@ -166,6 +173,7 @@ def k_means_pp(X, k, max_iter):
 
         data_map = assign_data2clusters(X, centroids)
 
+        # Naive approach for k=3
         cluster0 = []
         cluster1 = []
         cluster2 = []
@@ -183,7 +191,7 @@ def k_means_pp(X, k, max_iter):
             else:
                 print("Something went wrong.")
 
-        # Average each point with and update each cluster
+        # Average each point in each cluster and update the centroids accordingly
         running_x = 0
         running_y = 0
         for i in cluster0:
@@ -208,8 +216,10 @@ def k_means_pp(X, k, max_iter):
 
     return (centroids, obj_func_values)
 
-    
+
 centroids, obj_func_values = k_means_pp(X, 3, 1000)
+
+
 
 
 # Used for plots 2 - 6 in the PDF
@@ -220,25 +230,34 @@ centroids, obj_func_values = k_means_pp(X, 3, 1000)
 # plt.show()
 
 
+
+
+data_map = assign_data2clusters(X, centroids)
+new_y = [-1 for x in range(len(X))]
+for i in range(len(X)):
+    if data_map[i][0] == 1:
+        new_y[i] = 0
+    elif data_map[i][1] == 1:
+        new_y[i] = 1
+    elif data_map[i][2] == 1:
+        new_y[i] = 2
+    else:
+        print("Something went wrong.")
+
 # Used for plot 7 in the pdf
 # Plot data with colors
-# data_map = assign_data2clusters(X, centroids)
-# new_y = [-1 for x in range(len(X))]
-# for i in range(len(X)):
-#     if data_map[i][0] == 1:
-#         new_y[i] = 0
-#     elif data_map[i][1] == 1:
-#         new_y[i] = 1
-#     elif data_map[i][2] == 1:
-#         new_y[i] = 2
-#     else:
-#         print("Something went wrong.")
-
 # plt.scatter(X[:, 0], X[:, 1], c=new_y)
 # plt.title('Evaluated coloring')
 # plt.xlabel('sepal length/sepal width')
 # plt.ylabel('petal length/petal width')
 # plt.show()
+
+
+# Ideally I wouldn't of generalized to k=3 so that I could plot the accuracy as per described in the assignment pdf but I believe that the objective accuracy would be highest around k=3 and decrease as k takes higher or lower values. 
+# I believe that k would be the global maximum of the graph of x=number of cluster and y=clustering objective
+
+
+
 
 
 
