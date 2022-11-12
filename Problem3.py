@@ -1,3 +1,11 @@
+# Name: Chase Rensberger
+# Homework 4 Problem 3
+# Honestly a lot of this code is dependent on k equaling 3 which is obviously not the only condition but is what I implemented because I am very low on time to finish this.
+# I also picked k=3 because it is the true value of the data, which obviously you wouldn't know it a real case but I implemented here just so what I had would be as relevant as possible.
+# Everything else (other than the value of k) is working fine though as far as I can tell.
+# There is a seperate pdf in this directory called Problem5Plots.pdf which has the plots showing the actual coloring initially alongside the graphs of the objective function for each iteration
+# and then a final plot with the data colored by assigment which can be compared to the first plot
+
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
@@ -15,14 +23,15 @@ for i in X:
     i[1] = i[2] / i[3]
 X = X[:, :2]
 
+# Used for plot 1 in the pdf
 # Plot data with colors
 # plt.scatter(X[:, 0], X[:, 1], c=y)
+# plt.title('True coloring')
+# plt.xlabel('sepal length/sepal width')
+# plt.ylabel('petal length/petal width')
 # plt.show()
 
-
-# Honestly a lot of this code is dependent on k equaling 3 which is only because I am very low on time to finish this
-
-
+# Euclidian distance between two points
 def distance(p1, p2):
     return np.linalg.norm(p1-p2)
 
@@ -174,6 +183,7 @@ def k_means_pp(X, k, max_iter):
             else:
                 print("Something went wrong.")
 
+        # Average each point with and update each cluster
         running_x = 0
         running_y = 0
         for i in cluster0:
@@ -199,7 +209,37 @@ def k_means_pp(X, k, max_iter):
     return (centroids, obj_func_values)
 
     
-print(k_means_pp(X, 3, 10))
+centroids, obj_func_values = k_means_pp(X, 3, 1000)
+
+
+# Used for plots 2 - 6 in the PDF
+# plt.plot(obj_func_values)
+# plt.title('Objective function over 1000 iterations for k=3')
+# plt.xlabel('Iterations')
+# plt.ylabel('Objective Function')
+# plt.show()
+
+
+# Used for plot 7 in the pdf
+# Plot data with colors
+# data_map = assign_data2clusters(X, centroids)
+# new_y = [-1 for x in range(len(X))]
+# for i in range(len(X)):
+#     if data_map[i][0] == 1:
+#         new_y[i] = 0
+#     elif data_map[i][1] == 1:
+#         new_y[i] = 1
+#     elif data_map[i][2] == 1:
+#         new_y[i] = 2
+#     else:
+#         print("Something went wrong.")
+
+# plt.scatter(X[:, 0], X[:, 1], c=new_y)
+# plt.title('Evaluated coloring')
+# plt.xlabel('sepal length/sepal width')
+# plt.ylabel('petal length/petal width')
+# plt.show()
+
 
 
 
