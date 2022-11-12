@@ -20,6 +20,9 @@ X = X[:, :2]
 # plt.show()
 
 
+# Honestly a lot of this code is dependent on k equaling 3 which is only because I am very low on time to finish this
+
+
 def distance(p1, p2):
     return np.linalg.norm(p1-p2)
 
@@ -109,14 +112,14 @@ def compute_objective(X, C):
     """
     
 
-    distance_map = np.zeros((len(X), len(C)))
+    distance_map = np.zeros((len(X), len(C))) # n x k matrix of zeros
     obj_func_val = 0
 
-    for i in range(len(X)):
-        for j in range(len(C)):
-            distance_map[i][j] = distance(X[i], C[j])
+    for i in range(len(X)): # Loop through every point
+        for j in range(len(C)): # Loop through each centroid
+            distance_map[i][j] = distance(X[i], C[j]) # Distance from each point to each centroid
         for k in range(len(C)):
-            obj_func_val += min(np.array(distance_map[i])) ** 2
+            obj_func_val += min(np.array(distance_map[i])) ** 2 # Add the value of the distance to the centroid for the cluster the point is apart of
 
     return obj_func_val
 
@@ -147,24 +150,58 @@ def k_means_pp(X, k, max_iter):
         The objective value at each iteration
     """
     centroids = k_init(X, k)
-    data_map = assign_data2clusters(X, centroids)
     obj_func_values = []
 
-    cluster1 = []
-    cluster2 = []
-    cluster3 = []
+
+    for iter in range(max_iter):
+
+        data_map = assign_data2clusters(X, centroids)
+
+        cluster0 = []
+        cluster1 = []
+        cluster2 = []
+
+        obj_func_values.append(compute_objective(X, centroids))
+
+        # Sort all points into an array of other points in the same cluster
+        for i in range(len(X)):
+            if data_map[i][0] == 1:
+                cluster0.append(X[i])
+            elif data_map[i][1] == 1:
+                cluster1.append(X[i])
+            elif data_map[i][2] == 1:
+                cluster2.append(X[i])
+            else:
+                print("Something went wrong.")
+
+        running_x = 0
+        running_y = 0
+        for i in cluster0:
+            running_x += i[0]
+            running_y += i[1]
+        centroids[0] = np.array((running_x / len(cluster0), running_y / len(cluster0)))
+
+        running_x = 0
+        running_y = 0
+        for i in cluster1:
+            running_x += i[0]
+            running_y += i[1]
+        centroids[1] = np.array((running_x / len(cluster1), running_y / len(cluster1)))
+
+        running_x = 0
+        running_y = 0
+        for i in cluster2:
+            running_x += i[0]
+            running_y += i[1]
+        centroids[2] = np.array((running_x / len(cluster2), running_y / len(cluster2)))
 
 
-    # Sort all points into an array of other points in the same cluster
-    for i in range(len(X)):
-        if data_map[i][0] == 1:
-            cluster1.append(X[i])
-        elif data_map[i][1] == 1:
-            cluster2.append(X[i])
-        elif data_map[i][2] == 1:
-            cluster3.append(X[i])
-        else:
-            print("Something went wrong.")
+    return (centroids, obj_func_values)
+
+    
+print(k_means_pp(X, 3, 10))
+
+
 
 
 
