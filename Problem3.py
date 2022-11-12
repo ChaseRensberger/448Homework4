@@ -42,9 +42,22 @@ def k_init(X, k):
     """
     # Create k x 2 np array so that we have k centroids, each defined by 2 parameters
     centroids = np.empty((k, 2))
-    #initialize these to random values
-    for i in centroids:
-        i = random.choice(X)
+    #initialize first centroid to random point
+    centroids[0] = random.choice(X)
+
+    # Initialize other centroids by maximizing distance to existing centroids
+    
+    distances = []
+    for i in range(len(X)): # Loop through each point
+        distances.append(distance(centroids[0], X[i])**2) # Not sure if squaring is neccasary but it is 10:20 PM and I don't have time to figure it out
+    
+    centroids[1] = X[distances.index(max(distances))]
+
+    distances = []
+    for i in range(len(X)):
+        distances.append(min(distance(centroids[0], X[i])**2, distance(centroids[1], X[i])**2))
+
+    centroids[2] = X[distances.index(max(distances))]
 
     return centroids
 
@@ -66,14 +79,15 @@ def assign_data2clusters(X, C):
         The binary matrix A which shows the assignments of data points (X) to
         the input centers (C).
     """
-    data_map = np.empty((len(X), len(C)))
+    data_map = np.zeros((len(X), len(C)))
 
-    # for i in range(len(X)):
-    #     distances = [0 for x in range(len(C))] # len = 3
-    #     X[i]
-
-
-
+    for i in range(len(X)):
+        distances = [0 for x in range(len(C))] # len = 3
+        for j in range(len(C)):
+            distances[j] = distance(X[i], C[j])
+        value_to_be_one = distances.index(min(distances))
+        data_map[i][value_to_be_one] = 1
+            
 
     return data_map
 
@@ -95,10 +109,16 @@ def compute_objective(X, C):
     """
     
 
-    squared_distances = [-1 for x in range(len(X))]
+    distance_map = np.zeros((len(X), len(C)))
+    obj_func_val = 0
 
-    for point_idx in range(len(X)):
-        pass
+    for i in range(len(X)):
+        for j in range(len(C)):
+            distance_map[i][j] = distance(X[i], C[j])
+        for k in range(len(C)):
+            obj_func_val += min(np.array(distance_map[i])) ** 2
+
+    return obj_func_val
 
 
 
@@ -126,4 +146,31 @@ def k_means_pp(X, k, max_iter):
     objective_values: array, shape (max_iter)
         The objective value at each iteration
     """
-    pass
+    centroids = k_init(X, k)
+    data_map = assign_data2clusters(X, centroids)
+    obj_func_values = []
+
+    cluster1 = []
+    cluster2 = []
+    cluster3 = []
+
+
+    # Sort all points into an array of other points in the same cluster
+    for i in range(len(X)):
+        if data_map[i][0] == 1:
+            cluster1.append(X[i])
+        elif data_map[i][1] == 1:
+            cluster2.append(X[i])
+        elif data_map[i][2] == 1:
+            cluster3.append(X[i])
+        else:
+            print("Something went wrong.")
+
+
+
+    
+
+
+
+
+
