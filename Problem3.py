@@ -55,26 +55,31 @@ def k_init(X, k):
         The initialize centers for kmeans++
     """
     # Create k x 2 np array so that we have k centroids, each defined by 2 parameters
-    centroids = np.empty((k, 2))
+    centroids = np.zeros((k, 2))
     #initialize first centroid to random point
     centroids[0] = random.choice(X)
+    # centroids[0] = X[0]
 
     # Initialize other centroids by maximizing distance to existing centroids
-    
-    distances = []
-    for i in range(len(X)): # Loop through each point
-        distances.append(distance(centroids[0], X[i])**2) # Not sure if squaring is neccasary but it is 10:20 PM and I don't have time to figure it out
-    
-    centroids[1] = X[distances.index(max(distances))]
+    # Want to initialize so that each centroid is allocated by finiding the point with the max distance to the nearest centroid
 
-    distances = []
-    for i in range(len(X)):
-        # Create centroids to be a furthest distance possible from other centroids
-        distances.append(min(distance(centroids[0], X[i])**2, distance(centroids[1], X[i])**2))
-
-    centroids[2] = X[distances.index(max(distances))]
+    for i in range(1, k): # we have k-1 centroids left to allocate
+        distances = []
+        for j in range(len(X)): # Loop through every data point
+            curr_min = 9223372036854775807
+            for l in range(len(centroids)):
+                if distance(X[j], centroids[l]) < curr_min:
+                    curr_min = distance(X[j], centroids[l])
+            distances.append(curr_min)
+        
+        centroids[i] = X[distances.index(max(distances))]
 
     return centroids
+
+centroids = k_init(X, 3)
+plt.scatter(X[:, 0], X[:, 1])
+plt.scatter(centroids[:, 0], centroids[:, 1])
+plt.show()
 
 
 
