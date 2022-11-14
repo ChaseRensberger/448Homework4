@@ -21,10 +21,10 @@ y_test = data_test[1]
 
 def determine_SVM_hp(X_train, y_train, X_test, y_test, default_kernel_type, default_gamma, default_c):
     
-    rf_default = SVC(kernel=default_kernel_type, gamma=default_gamma, C=default_c)
-    rf_default.fit(X_train, y_train)
-    rf_default_prediction = rf_default.predict(X_test)
-    default_score = metrics.accuracy_score(y_test, rf_default_prediction)
+    svm_default = SVC(kernel=default_kernel_type, gamma=default_gamma, C=default_c)
+    svm_default.fit(X_train, y_train)
+    svm_default_prediction = svm_default.predict(X_test)
+    default_score = metrics.accuracy_score(y_test, svm_default_prediction)
     # print("Default score: " + str(default_score))
 
     param_grid = {
@@ -33,23 +33,30 @@ def determine_SVM_hp(X_train, y_train, X_test, y_test, default_kernel_type, defa
         'C': [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0],
     }
 
-    rf = SVC()
-    random_search = RandomizedSearchCV(estimator = rf, param_distributions=param_grid, cv = 5, n_jobs = -1, verbose = 2, return_train_score=True, n_iter=10)
+    svm = SVC()
+    random_search = RandomizedSearchCV(estimator = svm, param_distributions=param_grid, cv = 5, n_jobs = -1, verbose = 2, return_train_score=True, n_iter=10)
     random_search.fit(X_train, y_train)
-    rf_best_params = random_search.best_params_
+    svm_best_params = random_search.best_params_
 
-    rf_best_params_classifier = rf_default = SVC(kernel=rf_best_params['kernel'], gamma=rf_best_params['gamma'], C=rf_best_params['C'])
-    rf_best_params_classifier.fit(X_train, y_train)
-    rf_best_params_prediction = rf_best_params_classifier.predict(X_test)
-    best_params_score = metrics.accuracy_score(y_test, rf_best_params_prediction)
+    svm_best_params_classifier = svm_default = SVC(kernel=svm_best_params['kernel'], gamma=svm_best_params['gamma'], C=svm_best_params['C'])
+    svm_best_params_classifier.fit(X_train, y_train)
+    svm_best_params_prediction = svm_best_params_classifier.predict(X_test)
+    best_params_score = metrics.accuracy_score(y_test, svm_best_params_prediction)
     # print("Best parameters score: " + str(best_params_score))
 
-    return (default_score, rf_best_params, best_params_score, random_search.cv_results_)
+    return (default_score, svm_best_params, best_params_score, random_search.cv_results_)
+
+def try_SVM_combination(X_train, y_train, X_test, y_test, kernel_type='rbf', gamma='scale', c=1.0):
+    svm = SVC(kernel=kernel_type, gamma=gamma, C=c)
+    svm.fit(X_train, y_train)
+    svm_prediction = svm.predict(X_test)
+    score = metrics.accuracy_score(y_test, svm_prediction)
+    return score
     
+print(try_SVM_combination(X_train, y_train, X_test, y_test))
 
-
-# rf_out = determine_SVM_hp(X_train, y_train, X_test, y_test, 'rbf', 'scale', 1.0)
-# print(rf_out[0])
-# print(rf_out[1])
-# print(rf_out[2])
-# print(rf_out[3])
+# svm_out = determine_SVM_hp(X_train, y_train, X_test, y_test, 'rbf', 'scale', 1.0)
+# print(svm_out[0])
+# print(svm_out[1])
+# print(svm_out[2])
+# print(svm_out[3])
