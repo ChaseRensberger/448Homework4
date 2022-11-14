@@ -58,7 +58,7 @@ def k_init(X, k):
     centroids = np.zeros((k, 2))
     #initialize first centroid to random point
     centroids[0] = random.choice(X)
-    # centroids[0] = X[0]
+    # centroids[0] = X[1] # I used this sometimes in testing for repeatable behavior
 
     # Initialize other centroids by maximizing distance to existing centroids
     # Want to initialize so that each centroid is allocated by finiding the point with the max distance to the nearest centroid
@@ -76,10 +76,12 @@ def k_init(X, k):
 
     return centroids
 
-centroids = k_init(X, 3)
-plt.scatter(X[:, 0], X[:, 1])
-plt.scatter(centroids[:, 0], centroids[:, 1])
-plt.show()
+
+# Testing k_init
+# centroids = k_init(X, 3)
+# plt.scatter(X[:, 0], X[:, 1])
+# plt.scatter(centroids[:, 0], centroids[:, 1])
+# plt.show()
 
 
 
@@ -138,8 +140,8 @@ def compute_objective(X, C):
     for i in range(len(X)): # Loop through every point
         for j in range(len(C)): # Loop through each centroid
             distance_map[i][j] = distance(X[i], C[j]) # Distance from each point to each centroid
-        for k in range(len(C)):
-            obj_func_val += min(np.array(distance_map[i])) ** 2 # Add the value of the distance to the centroid for the cluster the point is apart of
+        
+        obj_func_val += min(distance_map[i]) ** 2 # Add the value of the distance to the centroid for the cluster the point is apart of
 
     return obj_func_val
 
@@ -178,51 +180,52 @@ def k_means_pp(X, k, max_iter):
 
         data_map = assign_data2clusters(X, centroids)
 
-        # Naive approach for k=3
-        cluster0 = []
-        cluster1 = []
-        cluster2 = []
-
-        obj_func_values.append(compute_objective(X, centroids))
-
-        # Sort all points into an array of other points in the same cluster
+        # ---------------------------------------
+        new_y = [-1 for x in range(len(X))]
         for i in range(len(X)):
             if data_map[i][0] == 1:
-                cluster0.append(X[i])
+                new_y[i] = 0
             elif data_map[i][1] == 1:
-                cluster1.append(X[i])
+                new_y[i] = 1
             elif data_map[i][2] == 1:
-                cluster2.append(X[i])
+                new_y[i] = 2
             else:
                 print("Something went wrong.")
 
+        plt.scatter(X[:, 0], X[:, 1])
+        plt.scatter(centroids[:, 0], centroids[:, 1])
+        plt.scatter(X[:, 0], X[:, 1], c=new_y)
+        
+        plt.show()
+
+
+        # ---------------------------------------
+
+        clusters = [[] for _ in range(k)]
+        
+
+        # Sort each point into a cluster array using data_map
+        for i in range(len(X)):
+            clusters[np.where(data_map[i] == 1)[0][0]].append(X[i])
+
+
+        obj_func_values.append(compute_objective(X, centroids))
+
         # Average each point in each cluster and update the centroids accordingly
-        running_x = 0
-        running_y = 0
-        for i in cluster0:
-            running_x += i[0]
-            running_y += i[1]
-        centroids[0] = np.array((running_x / len(cluster0), running_y / len(cluster0)))
-
-        running_x = 0
-        running_y = 0
-        for i in cluster1:
-            running_x += i[0]
-            running_y += i[1]
-        centroids[1] = np.array((running_x / len(cluster1), running_y / len(cluster1)))
-
-        running_x = 0
-        running_y = 0
-        for i in cluster2:
-            running_x += i[0]
-            running_y += i[1]
-        centroids[2] = np.array((running_x / len(cluster2), running_y / len(cluster2)))
+        for i in range(len(clusters)):
+            running_x = 0
+            running_y = 0
+            for j in clusters[i]:
+                running_x += j[0]
+                running_y += j[1]
+            if (len(clusters[i]) != 0):
+                centroids[i] = np.array((running_x / len(clusters[i]), running_y / len(clusters[i])))
 
 
     return (centroids, obj_func_values)
 
 
-centroids, obj_func_values = k_means_pp(X, 3, 1000)
+centroids, obj_func_values = k_means_pp(X, 3, 5)
 
 
 
@@ -235,19 +238,17 @@ centroids, obj_func_values = k_means_pp(X, 3, 1000)
 # plt.show()
 
 
-
-
-data_map = assign_data2clusters(X, centroids)
-new_y = [-1 for x in range(len(X))]
-for i in range(len(X)):
-    if data_map[i][0] == 1:
-        new_y[i] = 0
-    elif data_map[i][1] == 1:
-        new_y[i] = 1
-    elif data_map[i][2] == 1:
-        new_y[i] = 2
-    else:
-        print("Something went wrong.")
+# data_map = assign_data2clusters(X, centroids)
+# new_y = [-1 for x in range(len(X))]
+# for i in range(len(X)):
+#     if data_map[i][0] == 1:
+#         new_y[i] = 0
+#     elif data_map[i][1] == 1:
+#         new_y[i] = 1
+#     elif data_map[i][2] == 1:
+#         new_y[i] = 2
+#     else:
+#         print("Something went wrong.")
 
 # Used for plot 7 in the pdf
 # Plot data with colors
