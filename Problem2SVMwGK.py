@@ -35,9 +35,9 @@ def determine_SVM_hp(X_train, y_train, X_test, y_test, default_kernel_type='rbf'
 
     # Largely just used for testing purposes
     alt_param_grid = {
-        'kernel': ['rbf', 'linear', 'sigmoid', 'poly'],
-        'gamma': ['scale', 'auto'],
-        'C': [1.0],
+        'kernel': ['rbf'],
+        'gamma': ['scale'],
+        'C': [2.0],
     }
 
     svm = SVC()

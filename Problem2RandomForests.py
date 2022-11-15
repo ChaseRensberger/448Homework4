@@ -38,7 +38,7 @@ def determine_random_forest_hp(X_train, y_train, X_test, y_test, default_n_estim
 
     # Largely just used for testing purposes
     alt_param_grid = {
-        'n_estimators': [x for x in range(50, 1000, 50)],
+        'n_estimators': [650],
         'bootstrap': [True],
         'max_depth': [None],
         'min_impurity_decrease': [0.0],
