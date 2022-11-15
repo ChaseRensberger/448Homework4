@@ -9,3 +9,4 @@ To whoever is grading this: this assignment has a lot of files so I made this RE
 
 Also because I didn't want to put my explanation for #3 exclusively in the comments, I'll put my answers here as well:
 
+We can see that k=5 minimized our objective function in the range 1-5. With this knowledge we can reate a plot showing how objective changes with number of iterations and create a plot with the data colored by assignment, and the cluster centers (for k=5). All of these plots are avaliable in Problem3Plots.pdf. 

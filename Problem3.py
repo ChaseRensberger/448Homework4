@@ -2,6 +2,7 @@
 # Homework 4 Problem 3
 
 # There is a seperate pdf in this directory called Problem3Plots.pdf which has the relevant plots as per requested in the assigment instructions. They are labeled at the top.
+# There is also some additional explanation in the README.md
 
 import numpy as np
 import scipy as sp
@@ -104,7 +105,7 @@ def assign_data2clusters(X, C):
     data_map = np.zeros((len(X), len(C)))
 
     for i in range(len(X)):
-        distances = [0 for x in range(len(C))] # len = 3
+        distances = [0 for x in range(len(C))]
         for j in range(len(C)):
             distances[j] = distance(X[i], C[j])
         value_to_be_one = distances.index(min(distances))
@@ -223,21 +224,32 @@ def k_means_pp(X, k, max_iter):
     return (centroids, obj_func_values)
 
 
-centroids1, obj_func_values1 = k_means_pp(X, 1, 50)
-centroids2, obj_func_values2 = k_means_pp(X, 2, 50)
-centroids3, obj_func_values3 = k_means_pp(X, 3, 50)
-centroids4, obj_func_values4 = k_means_pp(X, 4, 50)
-centroids5, obj_func_values5 = k_means_pp(X, 5, 50)
+# centroids1, obj_func_values1 = k_means_pp(X, 1, 50)
+# centroids2, obj_func_values2 = k_means_pp(X, 2, 50)
+# centroids3, obj_func_values3 = k_means_pp(X, 3, 50)
+# centroids4, obj_func_values4 = k_means_pp(X, 4, 50)
+# centroids5, obj_func_values5 = k_means_pp(X, 5, 50)
 
-all_objectives = [obj_func_values1[-1], obj_func_values2[-1], obj_func_values3[-1], obj_func_values4[-1], obj_func_values5[-1]]
+# all_objectives = [obj_func_values1[-1], obj_func_values2[-1], obj_func_values3[-1], obj_func_values4[-1], obj_func_values5[-1]]
 
-# Used for plots 2 - 6 in the PDF
-plt.plot(all_objectives)
-plt.title('Objective function over 50 iterations for k=1')
-plt.xlabel('Iterations')
-plt.ylabel('Objective Function')
-plt.show()
+# Used for plots 2 in the PDF
+# We can see that k=5 minimized our objective function in the range 1-5. 
+# plt.plot([1,2,3,4,5], all_objectives)
+# plt.title('Clusters vs clustering objective')
+# plt.xlabel('Number of Clusters')
+# plt.ylabel('Clustering Objective')
+# plt.show()
 
+# centroids, obj_func_values = k_means_pp(X, 5, 1000)
+# Used for plots 3-7 in the PDF
+# plt.plot(obj_func_values)
+# plt.title('Objective function over 1000 iterations for k=5')
+# plt.xlabel('Iteration')
+# plt.ylabel('Objective Function')
+# plt.show()
+
+
+# centroids, obj_func_values = k_means_pp(X, 5, 50)
 
 # data_map = assign_data2clusters(X, centroids)
 # new_y = [-1 for x in range(len(X))]
@@ -248,21 +260,20 @@ plt.show()
 #         new_y[i] = 1
 #     elif data_map[i][2] == 1:
 #         new_y[i] = 2
+#     elif data_map[i][3] == 1:
+#         new_y[i] = 3
+#     elif data_map[i][4] == 1:
+#         new_y[i] = 4
 #     else:
 #         print("Something went wrong.")
 
-# Used for plot 7 in the pdf
-# Plot data with colors
+# # Used for plot 8 in the pdf
+# # Plot data with colors
 # plt.scatter(X[:, 0], X[:, 1], c=new_y)
 # plt.title('Evaluated coloring')
 # plt.xlabel('sepal length/sepal width')
 # plt.ylabel('petal length/petal width')
 # plt.show()
-
-
-# Ideally I wouldn't of generalized to k=3 so that I could plot the accuracy as per described in the assignment pdf but I believe that the objective accuracy would be highest around k=3 and decrease as k takes higher or lower values. 
-# I believe that k would be the global maximum of the graph of x=number of cluster and y=clustering objective
-
 
 
 

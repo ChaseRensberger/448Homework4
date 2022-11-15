@@ -2,8 +2,8 @@
 # The hyper paramaters we are modifying are:
 # n_estimators Default: 100
 # max_depth Default: None
-# lambda Default: 1
-# learning_rate Default: 1.0
+# lambda Default: None
+# learning_rate Default: None
 # missing Default: None
 # objective Default: 'binary:logistic'
 
@@ -32,7 +32,7 @@ def determine_xgboost_hp(X_train, y_train, X_test, y_test, default_n_estimators=
 
     param_grid = {
         'n_estimators': [x for x in range(50, 1000, 50)],
-        'max_depth': [None, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
+        'max_depth': [None],
         'reg_lambda': [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0],
         'learning_rate': [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0],
         'missing': [np.nan, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10],
@@ -40,14 +40,14 @@ def determine_xgboost_hp(X_train, y_train, X_test, y_test, default_n_estimators=
     }
 
     # Largely just used for testing purposes
-    alt_param_grid = {
-        'n_estimators': [x for x in range(50, 1000, 50)],
-        'max_depth': [None, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
-        'reg_lambda': [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0],
-        'learning_rate': [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0],
-        'missing': [np.nan, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10],
-        # 'objective': ['binary:logistic'], Not modifying objective
-    }
+    # alt_param_grid = {
+    #     'n_estimators': [x for x in range(50, 1000, 50)],
+    #     'max_depth': [None, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
+    #     'reg_lambda': [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0],
+    #     'learning_rate': [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0],
+    #     'missing': [np.nan, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10],
+    #     # 'objective': ['binary:logistic'], Not modifying objective
+    # }
 
     bdt = XGBClassifier()
     # Can increase the number of iterations of our search to increase the probability of getting a good combination of parameters while sacrificing time, the extreme end would just be a grid search
@@ -63,18 +63,18 @@ def determine_xgboost_hp(X_train, y_train, X_test, y_test, default_n_estimators=
 
     return (default_score, bdt_best_params, best_params_score, random_search.cv_results_)
 #1e-5
-def try_xgboost_combination(X_train, y_train, X_test, y_test, n_estimators=100, max_depth=None, reg_lambda=None, learning_rate=None, missing=None):
+def try_xgboost_combination(X_train, y_train, X_test, y_test, n_estimators=100, max_depth=None, reg_lambda=None, learning_rate=None, missing=np.nan):
     bdt = XGBClassifier(n_estimators=n_estimators, max_depth=max_depth, reg_lambda=reg_lambda, learning_rate=learning_rate, missing=missing)
     bdt.fit(X_train, y_train)
     bdt_prediction = bdt.predict(X_test)
     score = metrics.accuracy_score(y_test, bdt_prediction)
     return score
 
-print(try_xgboost_combination(X_train, y_train, X_test, y_test))
+# print(try_xgboost_combination(X_train, y_train, X_test, y_test, reg_lambda=3.0))
     
 
-# bdt_out = determine_xgboost_hp(X_train, y_train, X_test, y_test)
-# print(bdt_out[0])
-# print(bdt_out[1])
-# print(bdt_out[2])
-# print(bdt_out[3])
+bdt_out = determine_xgboost_hp(X_train, y_train, X_test, y_test)
+print(bdt_out[0])
+print(bdt_out[1])
+print(bdt_out[2])
+print(bdt_out[3])
