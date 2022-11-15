@@ -2,7 +2,7 @@
 # Homework 4 Problem 3
 
 # There is a seperate pdf in this directory called Problem3Plots.pdf which has the relevant plots as per requested in the assigment instructions. They are labeled at the top.
-# There is also some additional explanation in the README.md
+# There is also some additional explanation in the README.md if the comments in this file are at all confusing
 
 import numpy as np
 import scipy as sp
@@ -138,7 +138,7 @@ def compute_objective(X, C):
     for i in range(len(X)): # Loop through every point
         for j in range(len(C)): # Loop through each centroid
             distance_map[i][j] = distance(X[i], C[j]) # Distance from each point to each centroid
-        # This does it kind've out of order but essentially we are finding the within cluster sum of squares
+        # This approach does this out of order but essentially we are finding the within cluster sum of squares
         obj_func_val += min(distance_map[i]) ** 2 # Add the value of the distance to the centroid for the cluster the point is apart of
 
     return obj_func_val
@@ -202,7 +202,6 @@ def k_means_pp(X, k, max_iter):
 
         clusters = [[] for _ in range(k)]
         
-
         # Sort each point into a cluster array using data_map
         for i in range(len(X)):
             clusters[np.where(data_map[i] == 1)[0][0]].append(X[i])
@@ -240,6 +239,10 @@ def k_means_pp(X, k, max_iter):
 # plt.ylabel('Clustering Objective')
 # plt.show()
 
+
+# Based on the above plot we decide our number of clusters to be k=5 as that minimized out objective function in the range 1-5 over 50 iterations.
+# We then create a plot showing how objective changes with number of iterations (plots 3-7 in the pdf) and create a plot with the data colored by assignment, and the cluster centers (plot 8 in the pdf).
+
 # centroids, obj_func_values = k_means_pp(X, 5, 1000)
 # Used for plots 3-7 in the PDF
 # plt.plot(obj_func_values)
@@ -249,31 +252,33 @@ def k_means_pp(X, k, max_iter):
 # plt.show()
 
 
-# centroids, obj_func_values = k_means_pp(X, 5, 50)
+centroids, obj_func_values = k_means_pp(X, 5, 50)
 
-# data_map = assign_data2clusters(X, centroids)
-# new_y = [-1 for x in range(len(X))]
-# for i in range(len(X)):
-#     if data_map[i][0] == 1:
-#         new_y[i] = 0
-#     elif data_map[i][1] == 1:
-#         new_y[i] = 1
-#     elif data_map[i][2] == 1:
-#         new_y[i] = 2
-#     elif data_map[i][3] == 1:
-#         new_y[i] = 3
-#     elif data_map[i][4] == 1:
-#         new_y[i] = 4
-#     else:
-#         print("Something went wrong.")
+data_map = assign_data2clusters(X, centroids)
+new_y = [-1 for x in range(len(X))]
+for i in range(len(X)):
+    if data_map[i][0] == 1:
+        new_y[i] = 0
+    elif data_map[i][1] == 1:
+        new_y[i] = 1
+    elif data_map[i][2] == 1:
+        new_y[i] = 2
+    elif data_map[i][3] == 1:
+        new_y[i] = 3
+    elif data_map[i][4] == 1:
+        new_y[i] = 4
+    else:
+        print("Something went wrong.")
 
-# # Used for plot 8 in the pdf
-# # Plot data with colors
-# plt.scatter(X[:, 0], X[:, 1], c=new_y)
-# plt.title('Evaluated coloring')
-# plt.xlabel('sepal length/sepal width')
-# plt.ylabel('petal length/petal width')
-# plt.show()
+# Used for plot 8 in the pdf
+# Plot data with colors
+# The red dots are the centroids/cluster centers
+plt.scatter(X[:, 0], X[:, 1], c=new_y)
+plt.scatter(centroids[:, 0], centroids[:, 1], color='red')
+plt.title('Evaluated coloring')
+plt.xlabel('sepal length/sepal width')
+plt.ylabel('petal length/petal width')
+plt.show()
 
 
 

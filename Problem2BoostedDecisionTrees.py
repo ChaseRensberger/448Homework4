@@ -73,8 +73,8 @@ def try_xgboost_combination(X_train, y_train, X_test, y_test, n_estimators=100, 
 # print(try_xgboost_combination(X_train, y_train, X_test, y_test, reg_lambda=3.0))
     
 
-bdt_out = determine_xgboost_hp(X_train, y_train, X_test, y_test)
-print(bdt_out[0])
-print(bdt_out[1])
-print(bdt_out[2])
-print(bdt_out[3])
+# bdt_out = determine_xgboost_hp(X_train, y_train, X_test, y_test)
+# print(bdt_out[0])
+# print(bdt_out[1])
+# print(bdt_out[2])
+# print(bdt_out[3])

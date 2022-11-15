@@ -70,8 +70,8 @@ def try_random_forest_combination(X_train, y_train, X_test, y_test, n_estimators
 # print(try_random_forest_combination(X_train, y_train, X_test, y_test, min_samples_leaf=4, n_estimators=650))
 
 
-rf_out = determine_random_forest_hp(X_train, y_train, X_test, y_test)
-print(rf_out[0])
-print(rf_out[1])
-print(rf_out[2])
-print(rf_out[3])
+# rf_out = determine_random_forest_hp(X_train, y_train, X_test, y_test)
+# print(rf_out[0])
+# print(rf_out[1])
+# print(rf_out[2])
+# print(rf_out[3])
