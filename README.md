@@ -6,3 +6,6 @@ To whoever is grading this: this assignment has a lot of files so I made this RE
 - Problem 1 is located in Problem1.pdf
 - Problem 2 is contained in the Jupyter Notebook called Problem2.ipynb (This notebook also references/uses 3 other python files called Problem2BoostedDecisionTrees.py; Problem2RandomForests.py; Problem2SVMwGK.py)
 - Problem 3 is located in Problem3.py and relevant plots for problem 3 are located in Problem3Plots.pdf with comments inside of the python file to explain what is going on
+
+Also because I didn't want to put my explanation for #3 exclusively in the comments, I'll put my answers here as well:
+

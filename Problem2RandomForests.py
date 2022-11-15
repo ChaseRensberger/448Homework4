@@ -20,7 +20,7 @@ X_test = data_test[0]
 y_test = data_test[1]
 
 
-def determine_random_forest_hp(X_train, y_train, X_test, y_test, default_n_estimators, default_bootstrap, default_max_depth, default_min_impurity_decrease, default_min_samples_leaf):
+def determine_random_forest_hp(X_train, y_train, X_test, y_test, default_n_estimators=100, default_bootstrap=True, default_max_depth=None, default_min_impurity_decrease=0.0, default_min_samples_leaf=1):
     
     rf_default = RandomForestClassifier(n_estimators=default_n_estimators, bootstrap=default_bootstrap, max_depth=default_max_depth, min_impurity_decrease=default_min_impurity_decrease, min_samples_leaf=default_min_samples_leaf)
     rf_default.fit(X_train, y_train)
@@ -36,6 +36,7 @@ def determine_random_forest_hp(X_train, y_train, X_test, y_test, default_n_estim
         'min_samples_leaf': [x for x in range(1, 20)],
     }
 
+    # Largely just used for testing purposes
     alt_param_grid = {
         'n_estimators': [x for x in range(50, 1000, 50)],
         'bootstrap': [True],
@@ -46,6 +47,7 @@ def determine_random_forest_hp(X_train, y_train, X_test, y_test, default_n_estim
 
 
     rf = RandomForestClassifier()
+    # Can increase the number of iterations of our search to increase the probability of getting a good combination of parameters while sacrificing time, the extreme end would just be a grid search
     random_search = RandomizedSearchCV(estimator = rf, param_distributions=param_grid, cv = 5, n_jobs = -1, verbose = 2, return_train_score=True, n_iter=20)
     random_search.fit(X_train, y_train)
     rf_best_params = random_search.best_params_
@@ -68,7 +70,7 @@ def try_random_forest_combination(X_train, y_train, X_test, y_test, n_estimators
 # print(try_random_forest_combination(X_train, y_train, X_test, y_test, min_samples_leaf=4, n_estimators=650))
 
 
-rf_out = determine_random_forest_hp(X_train, y_train, X_test, y_test, 100, True, None, 0, 1)
+rf_out = determine_random_forest_hp(X_train, y_train, X_test, y_test)
 print(rf_out[0])
 print(rf_out[1])
 print(rf_out[2])

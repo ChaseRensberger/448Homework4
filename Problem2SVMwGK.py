@@ -19,7 +19,7 @@ X_test = data_test[0]
 y_test = data_test[1]
 
 
-def determine_SVM_hp(X_train, y_train, X_test, y_test, default_kernel_type, default_gamma, default_c):
+def determine_SVM_hp(X_train, y_train, X_test, y_test, default_kernel_type='rbf', default_gamma='scale', default_c=1.0):
     
     svm_default = SVC(kernel=default_kernel_type, gamma=default_gamma, C=default_c)
     svm_default.fit(X_train, y_train)
@@ -30,11 +30,19 @@ def determine_SVM_hp(X_train, y_train, X_test, y_test, default_kernel_type, defa
     param_grid = {
         'kernel': ['rbf', 'linear', 'poly', 'sigmoid'],
         'gamma': ['scale', 'auto'],
-        'C': [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0],
+        'C': [x*0.5 for x in range(1, 20)],
+    }
+
+    # Largely just used for testing purposes
+    alt_param_grid = {
+        'kernel': ['rbf', 'linear', 'sigmoid', 'poly'],
+        'gamma': ['scale', 'auto'],
+        'C': [1.0],
     }
 
     svm = SVC()
-    random_search = RandomizedSearchCV(estimator = svm, param_distributions=param_grid, cv = 5, n_jobs = -1, verbose = 2, return_train_score=True, n_iter=10)
+    # Can increase the number of iterations of our search to increase the probability of getting a good combination of parameters while sacrificing time, the extreme end would just be a grid search
+    random_search = RandomizedSearchCV(estimator = svm, param_distributions=alt_param_grid, cv = 5, n_jobs = -1, verbose = 2, return_train_score=True, n_iter=20)
     random_search.fit(X_train, y_train)
     svm_best_params = random_search.best_params_
 
@@ -53,9 +61,9 @@ def try_SVM_combination(X_train, y_train, X_test, y_test, kernel_type='rbf', gam
     score = metrics.accuracy_score(y_test, svm_prediction)
     return score
     
-# print(try_SVM_combination(X_train, y_train, X_test, y_test))
+# print(try_SVM_combination(X_train, y_train, X_test, y_test, gamma='auto'))
 
-svm_out = determine_SVM_hp(X_train, y_train, X_test, y_test, 'rbf', 'scale', 1.0)
+svm_out = determine_SVM_hp(X_train, y_train, X_test, y_test)
 print(svm_out[0])
 print(svm_out[1])
 print(svm_out[2])

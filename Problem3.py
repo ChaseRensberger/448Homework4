@@ -1,10 +1,7 @@
 # Name: Chase Rensberger
 # Homework 4 Problem 3
-# Honestly a lot of this code is dependent on k equaling 3 which is obviously not the only condition but is what I implemented because I am very low on time to finish this.
-# I also picked k=3 because it is the true value of the data, which obviously you wouldn't know it a real case but I implemented here just so what I had would be as relevant as possible.
-# Everything else (other than the value of k) is working fine though as far as I can tell.
-# There is a seperate pdf in this directory called Problem3Plots.pdf which has the plots showing the actual coloring initially alongside the graphs of the objective function for each iteration
-# and then a final plot with the data colored by assigment which can be compared to the first plot
+
+# There is a seperate pdf in this directory called Problem3Plots.pdf which has the relevant plots as per requested in the assigment instructions. They are labeled at the top.
 
 import numpy as np
 import scipy as sp
@@ -181,22 +178,23 @@ def k_means_pp(X, k, max_iter):
         data_map = assign_data2clusters(X, centroids)
 
         # ---------------------------------------
-        new_y = [-1 for x in range(len(X))]
-        for i in range(len(X)):
-            if data_map[i][0] == 1:
-                new_y[i] = 0
-            elif data_map[i][1] == 1:
-                new_y[i] = 1
-            elif data_map[i][2] == 1:
-                new_y[i] = 2
-            else:
-                print("Something went wrong.")
+        # I just used this for looking at the centroids between iterations
+        # new_y = [-1 for x in range(len(X))]
+        # for i in range(len(X)):
+        #     if data_map[i][0] == 1:
+        #         new_y[i] = 0
+        #     elif data_map[i][1] == 1:
+        #         new_y[i] = 1
+        #     elif data_map[i][2] == 1:
+        #         new_y[i] = 2
+        #     else:
+        #         print("Something went wrong.")
 
-        plt.scatter(X[:, 0], X[:, 1])
-        plt.scatter(centroids[:, 0], centroids[:, 1])
-        plt.scatter(X[:, 0], X[:, 1], c=new_y)
+        # plt.scatter(X[:, 0], X[:, 1])
+        # plt.scatter(centroids[:, 0], centroids[:, 1])
+        # plt.scatter(X[:, 0], X[:, 1], c=new_y)
         
-        plt.show()
+        # plt.show()
 
 
         # ---------------------------------------
@@ -225,17 +223,20 @@ def k_means_pp(X, k, max_iter):
     return (centroids, obj_func_values)
 
 
-centroids, obj_func_values = k_means_pp(X, 3, 5)
+centroids1, obj_func_values1 = k_means_pp(X, 1, 50)
+centroids2, obj_func_values2 = k_means_pp(X, 2, 50)
+centroids3, obj_func_values3 = k_means_pp(X, 3, 50)
+centroids4, obj_func_values4 = k_means_pp(X, 4, 50)
+centroids5, obj_func_values5 = k_means_pp(X, 5, 50)
 
-
-
+all_objectives = [obj_func_values1[-1], obj_func_values2[-1], obj_func_values3[-1], obj_func_values4[-1], obj_func_values5[-1]]
 
 # Used for plots 2 - 6 in the PDF
-# plt.plot(obj_func_values)
-# plt.title('Objective function over 1000 iterations for k=3')
-# plt.xlabel('Iterations')
-# plt.ylabel('Objective Function')
-# plt.show()
+plt.plot(all_objectives)
+plt.title('Objective function over 50 iterations for k=1')
+plt.xlabel('Iterations')
+plt.ylabel('Objective Function')
+plt.show()
 
 
 # data_map = assign_data2clusters(X, centroids)
