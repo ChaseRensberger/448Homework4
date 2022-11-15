@@ -48,7 +48,7 @@ def determine_random_forest_hp(X_train, y_train, X_test, y_test, default_n_estim
 
     rf = RandomForestClassifier()
     # Can increase the number of iterations of our search to increase the probability of getting a good combination of parameters while sacrificing time, the extreme end would just be a grid search
-    random_search = RandomizedSearchCV(estimator = rf, param_distributions=param_grid, cv = 5, n_jobs = -1, verbose = 2, return_train_score=True, n_iter=20)
+    random_search = RandomizedSearchCV(estimator = rf, param_distributions=param_grid, cv = 5, n_jobs = -1, verbose = 2, return_train_score=True, n_iter=10)
     random_search.fit(X_train, y_train)
     rf_best_params = random_search.best_params_
 
