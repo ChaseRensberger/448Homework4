@@ -133,14 +133,14 @@ def compute_objective(X, C):
         The objective for the given assigments
     """
     
-
+    # use this 2d array to store the distance from every point to every centroid, an alternative to this approach would be to call assign_data2clusters here
     distance_map = np.zeros((len(X), len(C))) # n x k matrix of zeros
     obj_func_val = 0
 
     for i in range(len(X)): # Loop through every point
         for j in range(len(C)): # Loop through each centroid
             distance_map[i][j] = distance(X[i], C[j]) # Distance from each point to each centroid
-        
+        # This does it kind've out of order but essentially we are finding the within cluster sum of squares
         obj_func_val += min(distance_map[i]) ** 2 # Add the value of the distance to the centroid for the cluster the point is apart of
 
     return obj_func_val

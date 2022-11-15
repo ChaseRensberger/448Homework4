@@ -33,11 +33,20 @@ def determine_random_forest_hp(X_train, y_train, X_test, y_test, default_n_estim
         'bootstrap': [True, False],
         'max_depth': [None, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
         'min_impurity_decrease': [x*0.5 for x in range(20)],
-        'min_samples_leaf': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        'min_samples_leaf': [x for x in range(1, 20)],
     }
 
+    alt_param_grid = {
+        'n_estimators': [x for x in range(50, 1000, 50)],
+        'bootstrap': [True],
+        'max_depth': [None],
+        'min_impurity_decrease': [0.0],
+        'min_samples_leaf': [4],
+    }
+
+
     rf = RandomForestClassifier()
-    random_search = RandomizedSearchCV(estimator = rf, param_distributions=param_grid, cv = 5, n_jobs = -1, verbose = 2, return_train_score=True, n_iter=10)
+    random_search = RandomizedSearchCV(estimator = rf, param_distributions=param_grid, cv = 5, n_jobs = -1, verbose = 2, return_train_score=True, n_iter=20)
     random_search.fit(X_train, y_train)
     rf_best_params = random_search.best_params_
 
@@ -56,11 +65,11 @@ def try_random_forest_combination(X_train, y_train, X_test, y_test, n_estimators
     score = metrics.accuracy_score(y_test, rf_prediction)
     return score
     
-print(try_random_forest_combination(X_train, y_train, X_test, y_test))
+# print(try_random_forest_combination(X_train, y_train, X_test, y_test, min_samples_leaf=4, n_estimators=650))
 
 
-# rf_out = determine_random_forest_hp(X_train, y_train, X_test, y_test, 100, True, None, 0, 1)
-# print(rf_out[0])
-# print(rf_out[1])
-# print(rf_out[2])
-# print(rf_out[3])
+rf_out = determine_random_forest_hp(X_train, y_train, X_test, y_test, 100, True, None, 0, 1)
+print(rf_out[0])
+print(rf_out[1])
+print(rf_out[2])
+print(rf_out[3])

@@ -53,10 +53,10 @@ def try_SVM_combination(X_train, y_train, X_test, y_test, kernel_type='rbf', gam
     score = metrics.accuracy_score(y_test, svm_prediction)
     return score
     
-print(try_SVM_combination(X_train, y_train, X_test, y_test))
+# print(try_SVM_combination(X_train, y_train, X_test, y_test))
 
-# svm_out = determine_SVM_hp(X_train, y_train, X_test, y_test, 'rbf', 'scale', 1.0)
-# print(svm_out[0])
-# print(svm_out[1])
-# print(svm_out[2])
-# print(svm_out[3])
+svm_out = determine_SVM_hp(X_train, y_train, X_test, y_test, 'rbf', 'scale', 1.0)
+print(svm_out[0])
+print(svm_out[1])
+print(svm_out[2])
+print(svm_out[3])
